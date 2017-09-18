@@ -12,9 +12,9 @@
         android:id="@+id/etQuery"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/gdResults"
+        android:layout_alignLeft="@+id/gvResults"
         android:layout_alignParentTop="true"
-        android:layout_alignStart="@+id/gdResults"
+        android:layout_alignStart="@+id/gvResults"
         android:layout_marginTop="23dp"
         android:ems="10"
         android:hint="@string/hint"
@@ -27,14 +27,14 @@
         android:layout_height="385dp"
         tools:layout_editor_absoluteX="8dp"
         tools:layout_editor_absoluteY="90dp"
-        android:id="@+id/gdResults"
+        android:id="@+id/gvResults"
         android:layout_below="@+id/btnSearch"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="25dp">
-
     </GridLayout>
 
     <Button
+        android:onClick="onArticleSearch"
         android:id="@+id/btnSearch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
