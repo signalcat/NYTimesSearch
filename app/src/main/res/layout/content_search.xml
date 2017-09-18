@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -9,28 +9,41 @@
     tools:showIn="@layout/activity_search">
 
     <EditText
-        android:id="@+id/editText"
+        android:id="@+id/etQuery"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/gdResults"
+        android:layout_alignParentTop="true"
+        android:layout_alignStart="@+id/gdResults"
+        android:layout_marginTop="23dp"
         android:ems="10"
+        android:hint="@string/hint"
         android:inputType="textPersonName"
-        android:text="Name"
-        tools:layout_editor_absoluteX="32dp"
-        tools:layout_editor_absoluteY="62dp" />
-
-    <Button
-        android:id="@+id/button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Button"
-        tools:layout_editor_absoluteX="266dp"
-        tools:layout_editor_absoluteY="62dp" />
+        tools:layout_editor_absoluteX="31dp"
+        tools:layout_editor_absoluteY="26dp" />
 
     <GridLayout
         android:layout_width="368dp"
         android:layout_height="385dp"
         tools:layout_editor_absoluteX="8dp"
-        tools:layout_editor_absoluteY="118dp">
+        tools:layout_editor_absoluteY="90dp"
+        android:id="@+id/gdResults"
+        android:layout_below="@+id/btnSearch"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="25dp">
 
     </GridLayout>
-</android.support.constraint.ConstraintLayout>
+
+    <Button
+        android:id="@+id/btnSearch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/etQuery"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginEnd="13dp"
+        android:layout_marginRight="13dp"
+        android:text="@string/btn_search"
+        tools:layout_editor_absoluteX="265dp"
+        tools:layout_editor_absoluteY="26dp" />
+</RelativeLayout>
