@@ -23,6 +23,7 @@
         tools:layout_editor_absoluteY="26dp" />
 
     <GridView
+        android:numColumns="4"
         android:layout_width="368dp"
         android:layout_height="385dp"
         tools:layout_editor_absoluteX="8dp"
