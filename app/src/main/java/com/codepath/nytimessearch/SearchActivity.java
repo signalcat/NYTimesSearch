@@ -11,6 +11,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.GridLayout;
 import android.widget.GridView;
 import android.widget.Toast;
 
@@ -18,15 +19,21 @@ import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 import cz.msebera.android.httpclient.Header;
 
 public class SearchActivity extends AppCompatActivity {
 
     EditText etQuery;
-//    GridView gvResults;
-//    Button btnSearch;
+    GridView gvResults;
+    Button btnSearch;
+
+    ArrayList<Article> articles;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,8 +43,9 @@ public class SearchActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         etQuery = (EditText) findViewById(R.id.etQuery);
-//        gvResults = (GridView) findViewById(R.id.gvResults);
-//        btnSearch = (Button) findViewById(R.id.btnSearch);
+        gvResults = (GridView) findViewById(R.id.gvResults);
+        btnSearch = (Button) findViewById(R.id.btnSearch);
+        articles = new ArrayList<>();
     }
 
     @Override
@@ -76,6 +84,18 @@ public class SearchActivity extends AppCompatActivity {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 Log.d("DEBUG", response.toString());
+
+                // Parse JSON object
+                JSONArray articalJsonRsesults = null;
+
+                try {
+                    articalJsonRsesults = response.getJSONObject("response").getJSONArray("docs");
+                    articles.addAll(Article.fromJSONArray(articalJsonRsesults));
+                    Log.d("DEBUG", articles.toString());
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
         });
 
