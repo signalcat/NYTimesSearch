@@ -11,6 +11,7 @@
         android:id="@+id/ivImage"/>
 
     <TextView
+        android:maxLines="2"
         android:text="text view"
         android:id="@+id/tvTitle"
         android:layout_width="wrap_content"
