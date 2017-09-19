@@ -7,6 +7,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -23,8 +24,20 @@ import java.util.List;
 // Specify the custom ViewHolder to access our views
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder>
 {
-    // Define the view holder
 
+    // Create OnItemClickListener
+    // Define listener member variable
+    private OnItemClickListener listener;
+    // Define the listener interface
+    public interface OnItemClickListener {
+        void onItemClick(View itemView, int position);
+    }
+    // Define the method that allows the parent activity or fragment to define the listener
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.listener = listener;
+    }
+
+    // Define the view holder
     // A direct reference to each views in a data item
     // Cache the views within the item layout for fast access
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -32,13 +45,25 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         public TextView tvTitle;
 
         // a constructor accepts the entire item row and does view lookups to find each subview
-        public ViewHolder(View itemView) {
+        public ViewHolder(final View itemView) {
             // Stores the itemView in a public final member variable
             // can be used to access the context from any ViewHolder instance
             super(itemView);
-
             ivThumbnails = (ImageView) itemView.findViewById(R.id.ivImage);
             tvTitle = (TextView) itemView.findViewById(R.id.tvTitle);
+            // Setup the click listener
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    // Triggers click upwards to the adapter on click
+                    if (listener != null) {
+                        int position = getAdapterPosition();
+                        if (position != RecyclerView.NO_POSITION) {
+                            listener.onItemClick(itemView, position);
+                        }
+                    }
+                }
+            });
         }
     }
 

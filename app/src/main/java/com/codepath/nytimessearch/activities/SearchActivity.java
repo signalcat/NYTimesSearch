@@ -14,6 +14,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridView;
+import android.widget.Toast;
 
 import com.codepath.nytimessearch.Article;
 import com.codepath.nytimessearch.adapters.ArticleArrayAdapter;
@@ -34,7 +35,8 @@ import cz.msebera.android.httpclient.Header;
 public class SearchActivity extends AppCompatActivity {
 
     EditText etQuery;
-    GridView gvResults;
+    //GridView gvResults;
+    RecyclerView rvArticles;
     Button btnSearch;
 
     ArrayList<Article> articles;
@@ -50,9 +52,23 @@ public class SearchActivity extends AppCompatActivity {
         setupViews();
 
         // Lookup the recyclerview in activity layout
-        RecyclerView rvArticles = (RecyclerView) findViewById(R.id.rvArticles);
+        rvArticles = (RecyclerView) findViewById(R.id.rvArticles);
         // Create adapter passing the data
         adapter = new RecyclerViewAdapter(this, articles);
+        // Attach a click handler to the adapter
+        adapter.setOnItemClickListener(new RecyclerViewAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View itemView, int position) {
+                // Create an intent to display the article
+                Intent i = new Intent(getApplicationContext(), ArticleActivity.class);
+                // Get the article to display
+                Article article = articles.get(position);
+                // Pass in the article into intent
+                i.putExtra("article", article);
+                // Launch the activity
+                startActivity(i);
+            }
+        });
         // Initialize articles
         rvArticles.setAdapter(adapter);
         // Set layout manager to position the items
@@ -62,13 +78,13 @@ public class SearchActivity extends AppCompatActivity {
     public void setupViews() {
         etQuery = (EditText) findViewById(R.id.etQuery);
         //gvResults = (GridView) findViewById(R.id.gvResults);
+        rvArticles = (RecyclerView) findViewById(R.id.rvArticles);
         btnSearch = (Button) findViewById(R.id.btnSearch);
         articles = new ArrayList<>();
         //adapter = new ArticleArrayAdapter(this, articles);
         //gvResults.setAdapter(adapter);
-
-        // hook up listener for grid click
-//        gvResults.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        // hook up listener for recycler view click
+//        rvArticles.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 //            @Override
 //            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 //                // Create an intent to display the article
