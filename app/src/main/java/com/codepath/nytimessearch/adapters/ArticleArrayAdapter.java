@@ -1,4 +1,4 @@
-package com.codepath.nytimessearch;
+package com.codepath.nytimessearch.adapters;
 
 import android.content.Context;
 import android.media.Image;
@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.codepath.nytimessearch.Article;
+import com.codepath.nytimessearch.R;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;

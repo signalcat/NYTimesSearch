@@ -2,9 +2,9 @@ package com.codepath.nytimessearch.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
@@ -13,13 +13,12 @@ import android.view.MenuItem;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.GridLayout;
 import android.widget.GridView;
-import android.widget.Toast;
 
 import com.codepath.nytimessearch.Article;
-import com.codepath.nytimessearch.ArticleArrayAdapter;
+import com.codepath.nytimessearch.adapters.ArticleArrayAdapter;
 import com.codepath.nytimessearch.R;
+import com.codepath.nytimessearch.adapters.RecyclerViewAdapter;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -39,7 +38,8 @@ public class SearchActivity extends AppCompatActivity {
     Button btnSearch;
 
     ArrayList<Article> articles;
-    ArticleArrayAdapter adapter;
+    //ArticleArrayAdapter adapter;
+    RecyclerViewAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,30 +49,38 @@ public class SearchActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         setupViews();
 
+        // Lookup the recyclerview in activity layout
+        RecyclerView rvArticles = (RecyclerView) findViewById(R.id.rvArticles);
+        // Create adapter passing the data
+        adapter = new RecyclerViewAdapter(this, articles);
+        // Initialize articles
+        rvArticles.setAdapter(adapter);
+        // Set layout manager to position the items
+        rvArticles.setLayoutManager(new GridLayoutManager(this, 4));
     }
 
     public void setupViews() {
         etQuery = (EditText) findViewById(R.id.etQuery);
-        gvResults = (GridView) findViewById(R.id.gvResults);
+        //gvResults = (GridView) findViewById(R.id.gvResults);
         btnSearch = (Button) findViewById(R.id.btnSearch);
         articles = new ArrayList<>();
-        adapter = new ArticleArrayAdapter(this, articles);
-        gvResults.setAdapter(adapter);
+        //adapter = new ArticleArrayAdapter(this, articles);
+        //gvResults.setAdapter(adapter);
 
         // hook up listener for grid click
-        gvResults.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                // Create an intent to display the article
-                Intent i = new Intent(getApplicationContext(), ArticleActivity.class);
-                // Get the article to display
-                Article article = articles.get(position);
-                // Pass in the article into intent
-                i.putExtra("article", article);
-                // Launch the activity
-                startActivity(i);
-            }
-        });
+//        gvResults.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                // Create an intent to display the article
+//                Intent i = new Intent(getApplicationContext(), ArticleActivity.class);
+//                // Get the article to display
+//                Article article = articles.get(position);
+//                // Pass in the article into intent
+//                i.putExtra("article", article);
+//                // Launch the activity
+//                startActivity(i);
+//            }
+//        });
     }
 
     @Override
@@ -117,7 +125,8 @@ public class SearchActivity extends AppCompatActivity {
 
                 try {
                     articalJsonRsesults = response.getJSONObject("response").getJSONArray("docs");
-                    adapter.addAll(Article.fromJSONArray(articalJsonRsesults));
+                    articles.addAll(Article.fromJSONArray(articalJsonRsesults));
+                    adapter.notifyDataSetChanged();
                     Log.d("DEBUG", articles.toString());
 
                 } catch (JSONException e) {
