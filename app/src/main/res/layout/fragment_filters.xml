@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center">
+
+    <TextView
+        android:text="@string/begin_date"
+        android:id="@+id/tvBeginDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <DatePicker
+        android:id="@+id/datePicker"
+        android:layout_width="wrap_content"
+        android:layout_height="70dp">
+    </DatePicker>
+
+    <TextView
+        android:text="@string/sort_order"
+        android:id="@+id/tvSortOrder"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <Spinner
+        android:id="@+id/spinnerSortOrder"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+    </Spinner>
+
+    <TextView
+        android:text="News Desk Values"
+        android:id="@+id/tvNewsDeskValues"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <CheckBox
+        android:id="@+id/cbArts"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <CheckBox
+        android:id="@+id/cbFashionStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <CheckBox
+        android:id="@+id/cbSports"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <Button
+        android:text="@string/save"
+        android:id="@+id/btnSaveFilter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+</LinearLayout>

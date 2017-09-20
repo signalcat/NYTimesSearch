@@ -2,9 +2,12 @@ package com.codepath.nytimessearch.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
@@ -12,8 +15,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.codepath.nytimessearch.EndlessRecyclerViewScrollListener;
+import com.codepath.nytimessearch.FilterDialogFragment;
 import com.codepath.nytimessearch.myclass.Article;
 import com.codepath.nytimessearch.R;
 import com.codepath.nytimessearch.adapters.RecyclerViewAdapter;
@@ -72,7 +77,10 @@ public class SearchActivity extends AppCompatActivity {
         // Initialize articles
         rvArticles.setAdapter(adapter);
         // Set layout manager to position the items
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 4);
+        // Display items in staggered grid
+        // para: number of columns, orientation
+        StaggeredGridLayoutManager gridLayoutManager =
+                new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         rvArticles.setLayoutManager(gridLayoutManager);
 
         // Retain an instance
@@ -128,6 +136,10 @@ public class SearchActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            FragmentManager fm = getSupportFragmentManager();
+            FilterDialogFragment filterDialogFragment = FilterDialogFragment.newInstance("Some Title");
+            filterDialogFragment.show(fm, "fragment_filters");
+            Toast.makeText(getApplicationContext(), "filters", Toast.LENGTH_LONG).show();
             return true;
         }
 

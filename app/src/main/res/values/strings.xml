@@ -4,4 +4,7 @@
     <string name="hint">Enter Search Query</string>
     <string name="btn_search">Search</string>
     <string name="title_activity_article">ArticleActivity</string>
+    <string name="begin_date">Begin Date</string>
+    <string name="sort_order">Sort Order</string>
+    <string name="save">SAVE</string>
 </resources>
