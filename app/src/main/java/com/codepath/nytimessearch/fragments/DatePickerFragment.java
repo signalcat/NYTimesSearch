@@ -1,4 +1,4 @@
-package com.codepath.nytimessearch;
+package com.codepath.nytimessearch.fragments;
 import android.support.v4.app.DialogFragment;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
