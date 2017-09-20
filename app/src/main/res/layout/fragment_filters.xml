@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:gravity="center">
+    android:gravity="center_horizontal">
 
     <TextView
         android:text="@string/begin_date"
@@ -11,45 +10,65 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
-    <DatePicker
-        android:id="@+id/datePicker"
+    <Button
+        android:onClick="onDatePick"
+        android:text="@string/press_here_to_set_the_date"
+        android:layout_below="@id/tvBeginDate"
+        android:id="@+id/btnDatePicker"
         android:layout_width="wrap_content"
-        android:layout_height="70dp">
-    </DatePicker>
+        android:layout_height="wrap_content">
+    </Button>
 
     <TextView
+        android:layout_below="@id/btnDatePicker"
+        android:id="@+id/tvDatePicked"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:layout_below="@id/btnDatePicker"
         android:text="@string/sort_order"
         android:id="@+id/tvSortOrder"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
     <Spinner
+        android:layout_below="@id/tvSortOrder"
         android:id="@+id/spinnerSortOrder"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
     </Spinner>
 
     <TextView
+        android:layout_below="@id/spinnerSortOrder"
         android:text="News Desk Values"
         android:id="@+id/tvNewsDeskValues"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
+
     <CheckBox
+        android:layout_below="@id/tvNewsDeskValues"
+        android:text="@string/arts"
         android:id="@+id/cbArts"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
     <CheckBox
+        android:layout_below="@id/cbArts"
+        android:text="@string/fashion_style"
         android:id="@+id/cbFashionStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
     <CheckBox
+        android:layout_below="@id/cbFashionStyle"
+        android:text="@string/sports"
         android:id="@+id/cbSports"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
     <Button
+        android:layout_below="@id/cbSports"
         android:text="@string/save"
         android:id="@+id/btnSaveFilter"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
-</LinearLayout>
+</RelativeLayout>

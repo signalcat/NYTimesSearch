@@ -7,4 +7,8 @@
     <string name="begin_date">Begin Date</string>
     <string name="sort_order">Sort Order</string>
     <string name="save">SAVE</string>
+    <string name="arts">Arts</string>
+    <string name="fashion_style"><![CDATA[Fashion & Style]]></string>
+    <string name="sports">Sports</string>
+    <string name="press_here_to_set_the_date">Set Date</string>
 </resources>

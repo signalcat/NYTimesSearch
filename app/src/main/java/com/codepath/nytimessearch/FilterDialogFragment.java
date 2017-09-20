@@ -6,12 +6,14 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 /**
  * Created by hezhang on 9/19/17.
  */
 
-public class FilterDialogFragment extends DialogFragment {
+public class FilterDialogFragment extends DialogFragment
+        implements View.OnClickListener  {
     public FilterDialogFragment() {
     }
 
@@ -25,7 +27,16 @@ public class FilterDialogFragment extends DialogFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_filters, container);
+        View view = inflater.inflate(R.layout.fragment_filters, container, false);
+        Button btnPickDate = (Button) view.findViewById(R.id.btnDatePicker);
+        btnPickDate.setOnClickListener(this);
+        return view;
+    }
+
+    @Override
+    public void onClick(View view) {
+        DialogFragment newFragment = new DatePickerFragment();
+        newFragment.show(getFragmentManager(), "datePicker");
     }
 
     @Override
@@ -34,5 +45,6 @@ public class FilterDialogFragment extends DialogFragment {
         // Fetch arguments from bundle and set title
         String title = getArguments().getString("title", "Filters");
         getDialog().setTitle(title);
+
     }
 }
