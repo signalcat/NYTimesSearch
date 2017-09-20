@@ -10,14 +10,11 @@ import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.GridView;
-import android.widget.Toast;
 
-import com.codepath.nytimessearch.Article;
-import com.codepath.nytimessearch.adapters.ArticleArrayAdapter;
+import com.codepath.nytimessearch.EndlessRecyclerViewScrollListener;
+import com.codepath.nytimessearch.myclass.Article;
 import com.codepath.nytimessearch.R;
 import com.codepath.nytimessearch.adapters.RecyclerViewAdapter;
 import com.loopj.android.http.AsyncHttpClient;
@@ -42,6 +39,9 @@ public class SearchActivity extends AppCompatActivity {
     ArrayList<Article> articles;
     //ArticleArrayAdapter adapter;
     RecyclerViewAdapter adapter;
+
+    private EndlessRecyclerViewScrollListener scrollListener;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,7 +72,20 @@ public class SearchActivity extends AppCompatActivity {
         // Initialize articles
         rvArticles.setAdapter(adapter);
         // Set layout manager to position the items
-        rvArticles.setLayoutManager(new GridLayoutManager(this, 4));
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 4);
+        rvArticles.setLayoutManager(gridLayoutManager);
+
+        // Retain an instance
+        scrollListener = new EndlessRecyclerViewScrollListener(gridLayoutManager) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+                // Triggered only when new data needs to be appended to the list
+                // Load data process
+                loadNextDataFromApi(page);
+            }
+        };
+        // Adds the scroll listener to recyclerview
+        rvArticles.addOnScrollListener(scrollListener);
     }
 
     public void setupViews() {
@@ -151,5 +164,36 @@ public class SearchActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    public void loadNextDataFromApi(int offset) {
+        String query = etQuery.getText().toString();
+        // Send an API request to retrieve appropriate paginated data
+        AsyncHttpClient client = new AsyncHttpClient();
+        String url = "https://api.nytimes.com/svc/search/v2/articlesearch.json";
+        RequestParams params = new RequestParams();
+        params.put("api-key","b006b8bc57b343a490fa8ecaf1e04c97");
+        params.put("page", offset);
+        params.put("q", query);
+
+        client.get(url, params, new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                Log.d("DEBUG", response.toString());
+
+                // Parse JSON object
+                JSONArray articalJsonRsesults = null;
+
+                try {
+                    articalJsonRsesults = response.getJSONObject("response").getJSONArray("docs");
+                    articles.addAll(Article.fromJSONArray(articalJsonRsesults));
+                    adapter.notifyItemRangeInserted(adapter.getItemCount(), 10);
+                    Log.d("DEBUG", articles.toString());
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 }

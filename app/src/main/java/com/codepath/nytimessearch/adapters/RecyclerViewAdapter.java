@@ -1,17 +1,15 @@
 package com.codepath.nytimessearch.adapters;
 
 import android.content.Context;
-import android.media.Image;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.codepath.nytimessearch.Article;
+import com.codepath.nytimessearch.myclass.Article;
 import com.codepath.nytimessearch.R;
 import com.squareup.picasso.Picasso;
 
