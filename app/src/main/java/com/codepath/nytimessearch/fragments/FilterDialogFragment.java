@@ -3,7 +3,9 @@ package com.codepath.nytimessearch.fragments;
 import android.app.DatePickerDialog;
 import android.app.FragmentTransaction;
 import android.content.Intent;
+import android.os.Debug;
 import android.os.Parcel;
+import android.os.Parcelable;
 import android.support.v4.app.DialogFragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -11,9 +13,12 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.Filter;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -37,14 +42,25 @@ public class FilterDialogFragment extends DialogFragment
         implements DatePickerDialog.OnDateSetListener {
     public FilterDialogFragment() {
     }
-    private Filters filter = new Filters("default", "default", "default");
+
+    private Filters filter = new Filters();
     private EditText etBeginDate;
+    private Spinner spinner;
+    private CheckBox cbArts;
+    private CheckBox cbFashion;
+    private CheckBox cbSports;
+
+    // 1. Defines the listener interface with a method
+    //    passing back filters as result to activity.
+    public interface OnFilterSearchListener {
+        void onUpdateFilters(Filters filter);
+    }
 
     // constructor
-    public static FilterDialogFragment newInstance(String title) {
+    public static FilterDialogFragment newInstance(Parcelable filter) {
         FilterDialogFragment filterDialogFragment = new FilterDialogFragment();
         Bundle args = new Bundle();
-        args.putString("title", title);
+        args.putParcelable("filters", filter);
         filterDialogFragment.setArguments(args);
         return filterDialogFragment;
     }
@@ -71,7 +87,7 @@ public class FilterDialogFragment extends DialogFragment
         // => "20160405"
         // Store this date into the filers object
         filter.setDate(urlDate);
-        // send through bundle back to
+        // Display the picked date
         etBeginDate.setText(filter.getDate(), TextView.BufferType.NORMAL);
     }
 
@@ -85,7 +101,11 @@ public class FilterDialogFragment extends DialogFragment
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        // Initialize button view and attach a onclick listener
+
+        // Store the filters to a member variable
+        filter = (Filters) Parcels.unwrap(getArguments().getParcelable("filters"));
+
+        // Initialize edittext to let user click and show the date.
         etBeginDate = (EditText) view.findViewById(R.id.etBeginDate);
         etBeginDate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -94,12 +114,68 @@ public class FilterDialogFragment extends DialogFragment
             }
         });
 
+        // Initialize the spinner to let user select the order
+        spinner = (Spinner) view.findViewById(R.id.spinnerSortOrder);
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int i, long l) {
+                filter.setOrder(spinner.getSelectedItem().toString());
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        // Get the check box view
+        cbArts = (CheckBox) view.findViewById(R.id.cbArts);
+        cbFashion = (CheckBox) view.findViewById(R.id.cbFashionStyle);
+        cbSports = (CheckBox) view.findViewById(R.id.cbSports);
+
+        // Get the checked/uncheck value and store in filter object
+        cbArts.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(cbArts.isChecked()) {
+                    filter.setArt(true);
+                } else {
+                    filter.setArt(false);
+                }
+            }
+        });
+
+        cbFashion.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(cbFashion.isChecked()) {
+                    filter.setFashion(true);
+                } else {
+                    filter.setFashion(false);
+                }
+            }
+        });
+
+        cbSports.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(cbSports.isChecked()) {
+                    filter.setSport(true);
+                } else {
+                    filter.setSport(false);
+                }
+            }
+        });
+
         Button btnSave = (Button) view.findViewById(R.id.btnSaveFilter);
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(getActivity(), SearchActivity.class);
-                startActivity(i);
+                // Return filters back to activity through the implemented listener
+                OnFilterSearchListener listener = (OnFilterSearchListener) getActivity();
+                listener.onUpdateFilters(filter);
+                // Close the dialog to return back to the parent activity
+                dismiss();
             }
         });
 

@@ -9,9 +9,30 @@ import java.util.logging.Filter;
  */
 @Parcel
 public class Filters {
-    String date;
-    String order;
-    String category;
+
+    public void setArt(boolean check) {
+        this.art = check;
+    }
+
+    public boolean isArt() {
+        return art;
+    }
+
+    public void setFashion(boolean check) {
+        this.fashion = check;
+    }
+
+    public boolean isFashion() {
+        return fashion;
+    }
+
+    public void setSport(boolean check) {
+        this.sport = check;
+    }
+
+    public boolean isSport() {
+        return sport;
+    }
 
     public void setDate(String date) {
         this.date = date;
@@ -19,10 +40,6 @@ public class Filters {
 
     public void setOrder(String order) {
         this.order = order;
-    }
-
-    public void setCategory(String category) {
-        this.category = category;
     }
 
     public String getDate() {
@@ -33,17 +50,22 @@ public class Filters {
         return order;
     }
 
-    public String getCategory() {
-        return category;
-    }
+    boolean art;
+    boolean fashion;
+    boolean sport;
+    String date;
+    String order;
 
     // empty constructor needed by Parceler library
     public Filters() {
     }
 
-    public Filters(String date, String order, String category) {
+    public Filters(String date, String order, Boolean art, Boolean fashion, Boolean sport) {
         this.date = date;
         this.order = order;
-        this.category = category;
+        this.art = false;
+        this.fashion = false;
+        this.sport = false;
     }
+
 }

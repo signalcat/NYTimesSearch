@@ -36,7 +36,8 @@ import java.util.ArrayList;
 
 import cz.msebera.android.httpclient.Header;
 
-public class SearchActivity extends AppCompatActivity {
+public class SearchActivity extends AppCompatActivity
+    implements FilterDialogFragment.OnFilterSearchListener {
 
     EditText etQuery;
     //GridView gvResults;
@@ -46,6 +47,9 @@ public class SearchActivity extends AppCompatActivity {
     ArrayList<Article> articles;
     //ArticleArrayAdapter adapter;
     RecyclerViewAdapter adapter;
+
+    // Initialize the filter object
+    Filters filter = new Filters();
 
     private EndlessRecyclerViewScrollListener scrollListener;
 
@@ -57,9 +61,6 @@ public class SearchActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         setupViews();
-
-        // Initialize the filter object
-        Filters filter = new Filters("default", "default", "default");
 
         // Lookup the recyclerview in activity layout
         rvArticles = (RecyclerView) findViewById(R.id.rvArticles);
@@ -145,7 +146,7 @@ public class SearchActivity extends AppCompatActivity {
         if (id == R.id.action_settings) {
             // Show filters dialog
             FragmentManager fm = getSupportFragmentManager();
-            FilterDialogFragment filterDialogFragment = FilterDialogFragment.newInstance("Filter Settings");
+            FilterDialogFragment filterDialogFragment = FilterDialogFragment.newInstance(Parcels.wrap(filter));
             filterDialogFragment.show(fm, "fragment_filters");
             return true;
         }
@@ -214,5 +215,13 @@ public class SearchActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    @Override
+    public void onUpdateFilters(Filters filter) {
+        // 1. Access the updated filters here and store them in member variable
+        String newDate = filter.getDate();
+        String newOrder = filter.getOrder();
+        // 2. Initiate a fresh search with these filters updated and same query value
     }
 }
