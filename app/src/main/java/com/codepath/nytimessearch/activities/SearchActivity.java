@@ -2,6 +2,8 @@ package com.codepath.nytimessearch.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Debug;
+import android.os.Parcel;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
@@ -20,6 +22,7 @@ import com.codepath.nytimessearch.fragments.FilterDialogFragment;
 import com.codepath.nytimessearch.myclass.Article;
 import com.codepath.nytimessearch.R;
 import com.codepath.nytimessearch.adapters.RecyclerViewAdapter;
+import com.codepath.nytimessearch.myclass.Filters;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -27,6 +30,7 @@ import com.loopj.android.http.RequestParams;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.parceler.Parcels;
 
 import java.util.ArrayList;
 
@@ -42,6 +46,7 @@ public class SearchActivity extends AppCompatActivity {
     ArrayList<Article> articles;
     //ArticleArrayAdapter adapter;
     RecyclerViewAdapter adapter;
+    Filters filter = new Filters("default", "default", "default");
 
     private EndlessRecyclerViewScrollListener scrollListener;
 
@@ -74,6 +79,7 @@ public class SearchActivity extends AppCompatActivity {
         });
         // Initialize articles
         rvArticles.setAdapter(adapter);
+
         // Set layout manager to position the items
         // Display items in staggered grid
         // para: number of columns, orientation
@@ -100,6 +106,9 @@ public class SearchActivity extends AppCompatActivity {
         rvArticles = (RecyclerView) findViewById(R.id.rvArticles);
         btnSearch = (Button) findViewById(R.id.btnSearch);
         articles = new ArrayList<>();
+        // unwrap the parcelable object
+        filter = (Filters) Parcels.unwrap(getIntent().getParcelableExtra("filter"));
+
         //adapter = new ArticleArrayAdapter(this, articles);
         //gvResults.setAdapter(adapter);
         // hook up listener for recycler view click
@@ -135,9 +144,8 @@ public class SearchActivity extends AppCompatActivity {
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             FragmentManager fm = getSupportFragmentManager();
-            FilterDialogFragment filterDialogFragment = FilterDialogFragment.newInstance("Some Title");
+            FilterDialogFragment filterDialogFragment = FilterDialogFragment.newInstance("Filter settings");
             filterDialogFragment.show(fm, "fragment_filters");
-            Toast.makeText(getApplicationContext(), "filters", Toast.LENGTH_LONG).show();
             return true;
         }
 
