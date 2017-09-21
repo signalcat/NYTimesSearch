@@ -46,7 +46,6 @@ public class SearchActivity extends AppCompatActivity {
     ArrayList<Article> articles;
     //ArticleArrayAdapter adapter;
     RecyclerViewAdapter adapter;
-    Filters filter = new Filters("default", "default", "default");
 
     private EndlessRecyclerViewScrollListener scrollListener;
 
@@ -58,6 +57,9 @@ public class SearchActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         setupViews();
+
+        // Initialize the filter object
+        Filters filter = new Filters("default", "default", "default");
 
         // Lookup the recyclerview in activity layout
         rvArticles = (RecyclerView) findViewById(R.id.rvArticles);
@@ -106,8 +108,6 @@ public class SearchActivity extends AppCompatActivity {
         rvArticles = (RecyclerView) findViewById(R.id.rvArticles);
         btnSearch = (Button) findViewById(R.id.btnSearch);
         articles = new ArrayList<>();
-        // unwrap the parcelable object
-        filter = (Filters) Parcels.unwrap(getIntent().getParcelableExtra("filter"));
 
         //adapter = new ArticleArrayAdapter(this, articles);
         //gvResults.setAdapter(adapter);
@@ -143,8 +143,9 @@ public class SearchActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            // Show filters dialog
             FragmentManager fm = getSupportFragmentManager();
-            FilterDialogFragment filterDialogFragment = FilterDialogFragment.newInstance("Filter settings");
+            FilterDialogFragment filterDialogFragment = FilterDialogFragment.newInstance("Filter Settings");
             filterDialogFragment.show(fm, "fragment_filters");
             return true;
         }

@@ -25,7 +25,7 @@ import java.util.Date;
 public class DatePickerFragment extends DialogFragment {
     // Defines the listener interface
     public interface DatePickerDialogListener {
-        void onFinishDateP(String inputText);
+        void onFinishDatePick(String inputText);
     }
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {

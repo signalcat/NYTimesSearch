@@ -34,9 +34,11 @@ import java.util.concurrent.TimeoutException;
  */
 
 public class FilterDialogFragment extends DialogFragment
-        implements DatePickerDialog.OnDateSetListener{
+        implements DatePickerDialog.OnDateSetListener {
     public FilterDialogFragment() {
     }
+    private Filters filter = new Filters("default", "default", "default");
+    private EditText etBeginDate;
 
     // constructor
     public static FilterDialogFragment newInstance(String title) {
@@ -68,6 +70,9 @@ public class FilterDialogFragment extends DialogFragment
         String urlDate = format.format(c.getTime());
         // => "20160405"
         // Store this date into the filers object
+        filter.setDate(urlDate);
+        // send through bundle back to
+        etBeginDate.setText(filter.getDate(), TextView.BufferType.NORMAL);
     }
 
     @Override
@@ -81,7 +86,7 @@ public class FilterDialogFragment extends DialogFragment
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         // Initialize button view and attach a onclick listener
-        EditText etBeginDate = (EditText) view.findViewById(R.id.etBeginDate);
+        etBeginDate = (EditText) view.findViewById(R.id.etBeginDate);
         etBeginDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -89,13 +94,14 @@ public class FilterDialogFragment extends DialogFragment
             }
         });
 
-//        Button btnSave = (Button) view.findViewById(R.id.btnSaveFilter);
-//        btnSave.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//
-//            }
-//        });
+        Button btnSave = (Button) view.findViewById(R.id.btnSaveFilter);
+        btnSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(getActivity(), SearchActivity.class);
+                startActivity(i);
+            }
+        });
 
         // Fetch arguments from bundle and set title
         String title = getArguments().getString("title", "Filters");
