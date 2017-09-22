@@ -8,10 +8,13 @@ import android.os.Bundle;
 import android.os.Debug;
 import android.os.Parcel;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
+import android.support.v7.widget.SearchView;
+
 import android.util.Log;
 import android.view.View;
 import android.view.Menu;
@@ -45,7 +48,8 @@ import cz.msebera.android.httpclient.Header;
 public class SearchActivity extends AppCompatActivity
     implements FilterDialogFragment.OnFilterSearchListener {
 
-    EditText etQuery;
+    String searchQuery;
+    //EditText etQuery;
     //GridView gvResults;
     RecyclerView rvArticles;
     Button btnSearch;
@@ -105,7 +109,7 @@ public class SearchActivity extends AppCompatActivity
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
                 // Triggered only when new data needs to be appended to the list
                 // Load data process
-                loadNextDataFromApi(page);
+                loadNextDataFromApi(searchQuery,page);
             }
         };
         // Adds the scroll listener to recyclerview
@@ -113,7 +117,7 @@ public class SearchActivity extends AppCompatActivity
     }
 
     public void setupViews() {
-        etQuery = (EditText) findViewById(R.id.etQuery);
+        //etQuery = (EditText) findViewById(R.id.etQuery);
         //gvResults = (GridView) findViewById(R.id.gvResults);
         rvArticles = (RecyclerView) findViewById(R.id.rvArticles);
         btnSearch = (Button) findViewById(R.id.btnSearch);
@@ -163,7 +167,29 @@ public class SearchActivity extends AppCompatActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_search, menu);
-        return true;
+        MenuItem searchItem = menu.findItem(R.id.action_search);
+
+        final SearchView searchView = (SearchView) searchItem.getActionView();
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                // perform query here
+                searchQuery = query;
+                onArticleSearch(query);
+
+                // workaround to avoid issues with some emulators and keyboard devices firing twice if a keyboard enter is used
+                // see https://code.google.com/p/android/issues/detail?id=24599
+                searchView.clearFocus();
+
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override
@@ -185,7 +211,7 @@ public class SearchActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
-    public void onArticleSearch(View view) {
+    public void onArticleSearch(String query) {
         if (!isNetworkAvailable()) {
             Toast.makeText(getApplicationContext(),"Network unavailable. Check your connection.",Toast.LENGTH_LONG).show();
         }
@@ -197,8 +223,8 @@ public class SearchActivity extends AppCompatActivity
         // 3. Reset endless scroll listener when performing a new search
         scrollListener.resetState();
 
-        String query = etQuery.getText().toString();
-//        Toast.makeText(this, "Searching for" + query, Toast.LENGTH_LONG).show();
+        // search
+//        String query = etQuery.getText().toString();
         AsyncHttpClient client = new AsyncHttpClient();
         String url = "https://api.nytimes.com/svc/search/v2/articlesearch.json";
 
@@ -252,8 +278,8 @@ public class SearchActivity extends AppCompatActivity
 
     }
 
-    public void loadNextDataFromApi(int offset) {
-        String query = etQuery.getText().toString();
+    public void loadNextDataFromApi(String query, int offset) {
+//        String query = etQuery.getText().toString();
         // Send an API request to retrieve appropriate paginated data
         AsyncHttpClient client = new AsyncHttpClient();
         String url = "https://api.nytimes.com/svc/search/v2/articlesearch.json";
