@@ -1,6 +1,9 @@
 package com.codepath.nytimessearch.activities;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Debug;
 import android.os.Parcel;
@@ -59,7 +62,6 @@ public class SearchActivity extends AppCompatActivity
 
     private EndlessRecyclerViewScrollListener scrollListener;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,7 +69,7 @@ public class SearchActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         setupViews();
-
+        checkNetWork();
         // Lookup the recyclerview in activity layout
         rvArticles = (RecyclerView) findViewById(R.id.rvArticles);
         // Create adapter passing the data
@@ -86,6 +88,7 @@ public class SearchActivity extends AppCompatActivity
                 startActivity(i);
             }
         });
+
         // Initialize articles
         rvArticles.setAdapter(adapter);
 
@@ -123,9 +126,6 @@ public class SearchActivity extends AppCompatActivity
         SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
         String urlDate = format.format(c.getTime());
         filter.setDate(urlDate);
-        categories.add("");
-        categories.add("");
-        categories.add("");
         //adapter = new ArticleArrayAdapter(this, articles);
         //gvResults.setAdapter(adapter);
         // hook up listener for recycler view click
@@ -142,6 +142,21 @@ public class SearchActivity extends AppCompatActivity
 //                startActivity(i);
 //            }
 //        });
+    }
+
+    public void checkNetWork() {
+        if (isNetworkAvailable()) {
+            Toast.makeText(getApplicationContext(),"Connected to Internet",Toast.LENGTH_LONG).show();
+        } else {
+            Toast.makeText(getApplicationContext(),"Network unavailable",Toast.LENGTH_LONG).show();
+        }
+    }
+
+    public Boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnectedOrConnecting();
     }
 
     @Override
@@ -171,6 +186,9 @@ public class SearchActivity extends AppCompatActivity
     }
 
     public void onArticleSearch(View view) {
+        if (!isNetworkAvailable()) {
+            Toast.makeText(getApplicationContext(),"Network unavailable",Toast.LENGTH_LONG).show();
+        }
         String query = etQuery.getText().toString();
 //        Toast.makeText(this, "Searching for" + query, Toast.LENGTH_LONG).show();
         AsyncHttpClient client = new AsyncHttpClient();
@@ -214,6 +232,13 @@ public class SearchActivity extends AppCompatActivity
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                super.onFailure(statusCode, headers, responseString, throwable);
+                Log.d("Failed: ", "" + statusCode);
+                Log.d("Error : ", "" + throwable);
             }
         });
 
@@ -262,6 +287,13 @@ public class SearchActivity extends AppCompatActivity
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                super.onFailure(statusCode, headers, responseString, throwable);
+                Log.d("Failed: ", "" + statusCode);
+                Log.d("Error : ", "" + throwable);
             }
         });
     }
