@@ -24,6 +24,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.codepath.nytimessearch.SpacesItemDecoration;
 import com.codepath.nytimessearch.listeners.EndlessRecyclerViewScrollListener;
 import com.codepath.nytimessearch.fragments.FilterDialogFragment;
 import com.codepath.nytimessearch.myclass.Article;
@@ -95,6 +96,10 @@ public class SearchActivity extends AppCompatActivity
 
         // Initialize articles
         rvArticles.setAdapter(adapter);
+
+        // Decor the recycler view
+        SpacesItemDecoration itemDecoration = new SpacesItemDecoration(1);
+        rvArticles.addItemDecoration(itemDecoration);
 
         // Set layout manager to position the items
         // Display items in staggered grid
