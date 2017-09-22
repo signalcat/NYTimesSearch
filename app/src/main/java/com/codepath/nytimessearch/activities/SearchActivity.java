@@ -189,6 +189,14 @@ public class SearchActivity extends AppCompatActivity
         if (!isNetworkAvailable()) {
             Toast.makeText(getApplicationContext(),"Network unavailable. Check your connection.",Toast.LENGTH_LONG).show();
         }
+
+        // Clear the array of data
+        articles.clear();
+        // Notify the adapter of the update
+        adapter.notifyDataSetChanged();
+        // 3. Reset endless scroll listener when performing a new search
+        scrollListener.resetState();
+
         String query = etQuery.getText().toString();
 //        Toast.makeText(this, "Searching for" + query, Toast.LENGTH_LONG).show();
         AsyncHttpClient client = new AsyncHttpClient();
