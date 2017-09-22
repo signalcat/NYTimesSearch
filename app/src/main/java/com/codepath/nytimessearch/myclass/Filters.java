@@ -1,7 +1,10 @@
 package com.codepath.nytimessearch.myclass;
 
+import android.content.Intent;
+
 import org.parceler.Parcel;
 
+import java.util.Calendar;
 import java.util.logging.Filter;
 
 /**
@@ -53,6 +56,7 @@ public class Filters {
     boolean art;
     boolean fashion;
     boolean sport;
+
     String date;
     String order;
 
@@ -61,6 +65,7 @@ public class Filters {
     }
 
     public Filters(String date, String order, Boolean art, Boolean fashion, Boolean sport) {
+
         this.date = date;
         this.order = order;
         this.art = false;

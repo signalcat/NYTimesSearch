@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -32,7 +33,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.parceler.Parcels;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import cz.msebera.android.httpclient.Header;
 
@@ -50,6 +53,9 @@ public class SearchActivity extends AppCompatActivity
 
     // Initialize the filter object
     Filters filter = new Filters();
+
+    // Search query strings
+    ArrayList<String> categories = new ArrayList<>();
 
     private EndlessRecyclerViewScrollListener scrollListener;
 
@@ -110,6 +116,16 @@ public class SearchActivity extends AppCompatActivity
         btnSearch = (Button) findViewById(R.id.btnSearch);
         articles = new ArrayList<>();
 
+        final Calendar c = Calendar.getInstance();
+        String currentDate = Integer.toString(c.get(Calendar.YEAR)) + Integer.toString(c.get(Calendar.MONTH))
+                + Integer.toString(c.get(Calendar.DAY_OF_MONTH));
+        // Get the beginDate here from the calendar parsed to correct format
+        SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
+        String urlDate = format.format(c.getTime());
+        filter.setDate(urlDate);
+        categories.add("");
+        categories.add("");
+        categories.add("");
         //adapter = new ArticleArrayAdapter(this, articles);
         //gvResults.setAdapter(adapter);
         // hook up listener for recycler view click
@@ -159,10 +175,27 @@ public class SearchActivity extends AppCompatActivity
 //        Toast.makeText(this, "Searching for" + query, Toast.LENGTH_LONG).show();
         AsyncHttpClient client = new AsyncHttpClient();
         String url = "https://api.nytimes.com/svc/search/v2/articlesearch.json";
+
         RequestParams params = new RequestParams();
         params.put("api-key","b006b8bc57b343a490fa8ecaf1e04c97");
         params.put("page", 0);
         params.put("q", query);
+        params.put("begin_date", filter.getDate());
+        params.put("sort", filter.getOrder());
+
+        StringBuilder builder = new StringBuilder();
+        builder.append("");
+        if (!categories.isEmpty()) {
+            builder.append(categories.get(0));
+            for ( int i = 1; i < categories.size(); i++) {
+                if (builder.length() == 0) {
+                    builder.append(categories.get(i));
+                } else {
+                    builder.append("%20" + categories.get(i));
+                }
+            }
+            params.put("fq", "news_desk:(" + builder.toString() + ")");
+        }
 
         client.get(url, params, new JsonHttpResponseHandler() {
             @Override
@@ -195,6 +228,22 @@ public class SearchActivity extends AppCompatActivity
         params.put("api-key","b006b8bc57b343a490fa8ecaf1e04c97");
         params.put("page", offset);
         params.put("q", query);
+        params.put("begin_date", filter.getDate());
+        params.put("sort", filter.getOrder());
+
+        StringBuilder builder = new StringBuilder();
+        builder.append("");
+        if (!categories.isEmpty()) {
+            builder.append(categories.get(0));
+            for ( int i = 1; i < categories.size(); i++) {
+                if (builder.length() == 0) {
+                    builder.append(categories.get(i));
+                } else {
+                    builder.append("%20" + categories.get(i));
+                }
+            }
+            params.put("fq", "news_desk:(" + builder.toString() + ")");
+        }
 
         client.get(url, params, new JsonHttpResponseHandler() {
             @Override
@@ -223,5 +272,16 @@ public class SearchActivity extends AppCompatActivity
         String newDate = filter.getDate();
         String newOrder = filter.getOrder();
         // 2. Initiate a fresh search with these filters updated and same query value
+        categories = new ArrayList<>();
+
+        if (filter.isArt()) {
+            categories.add("\"Art\"") ;
+        }
+        if (filter.isFashion()) {
+            categories.add("\"Fashion\"");
+        }
+        if (filter.isSport()) {
+            categories.add("\"Sport\"");
+        }
     }
 }
