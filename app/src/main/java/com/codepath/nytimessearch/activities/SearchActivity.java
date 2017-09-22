@@ -187,7 +187,7 @@ public class SearchActivity extends AppCompatActivity
 
     public void onArticleSearch(View view) {
         if (!isNetworkAvailable()) {
-            Toast.makeText(getApplicationContext(),"Network unavailable",Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(),"Network unavailable. Check your connection.",Toast.LENGTH_LONG).show();
         }
         String query = etQuery.getText().toString();
 //        Toast.makeText(this, "Searching for" + query, Toast.LENGTH_LONG).show();
