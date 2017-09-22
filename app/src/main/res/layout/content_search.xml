@@ -8,23 +8,22 @@
     tools:context="com.codepath.nytimessearch.activities.SearchActivity"
     tools:showIn="@layout/activity_search">
 
-    <EditText
-        android:id="@+id/etQuery"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="23dp"
-        android:ems="10"
-        android:hint="@string/hint"
-        android:inputType="textPersonName"
-        tools:layout_editor_absoluteX="31dp"
-        tools:layout_editor_absoluteY="26dp" />
+    <!--<EditText-->
+        <!--android:id="@+id/etQuery"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_alignParentTop="true"-->
+        <!--android:layout_marginTop="23dp"-->
+        <!--android:ems="10"-->
+        <!--android:hint="@string/hint"-->
+        <!--android:inputType="textPersonName"-->
+        <!--tools:layout_editor_absoluteX="31dp"-->
+        <!--tools:layout_editor_absoluteY="26dp" />-->
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rvArticles"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/etQuery"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true">
 
@@ -42,17 +41,18 @@
         <!--android:layout_marginTop="25dp">-->
     <!--</GridView>-->
 
-    <Button
-        android:onClick="onArticleSearch"
-        android:id="@+id/btnSearch"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/etQuery"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginEnd="13dp"
-        android:layout_marginRight="13dp"
-        android:text="@string/btn_search"
-        tools:layout_editor_absoluteX="265dp"
-        tools:layout_editor_absoluteY="26dp" />
+    <!--<Button-->
+        <!--android:onClick="onArticleSearch"-->
+        <!--android:id="@+id/btnSearch"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_alignBottom="@+id/etQuery"-->
+        <!--android:layout_alignParentEnd="true"-->
+        <!--android:layout_alignParentRight="true"-->
+        <!--android:layout_marginEnd="13dp"-->
+        <!--android:layout_marginRight="13dp"-->
+        <!--android:text="@string/btn_search"-->
+        <!--tools:layout_editor_absoluteX="265dp"-->
+        <!--tools:layout_editor_absoluteY="26dp" />-->
+
 </RelativeLayout>

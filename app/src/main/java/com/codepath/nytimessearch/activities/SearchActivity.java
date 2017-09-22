@@ -120,7 +120,7 @@ public class SearchActivity extends AppCompatActivity
         //etQuery = (EditText) findViewById(R.id.etQuery);
         //gvResults = (GridView) findViewById(R.id.gvResults);
         rvArticles = (RecyclerView) findViewById(R.id.rvArticles);
-        btnSearch = (Button) findViewById(R.id.btnSearch);
+        //btnSearch = (Button) findViewById(R.id.btnSearch);
         articles = new ArrayList<>();
 
         final Calendar c = Calendar.getInstance();
@@ -165,7 +165,7 @@ public class SearchActivity extends AppCompatActivity
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
+        // Inflate the menu_article; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_search, menu);
         MenuItem searchItem = menu.findItem(R.id.action_search);
 
