@@ -41,6 +41,9 @@ The following **bonus** features are implemented:
 The following **additional** features are implemented:
 
 * [X] Use a dialogfragment for the setting screen for better usability. 
+* [X] Improve filter settings dialogfragment UI.
+* [X] Use cardview to show the articles in round corner card with shadows in serach view.
+
 
 ## Video Walkthrough
 
