@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.codepath.nytimessearch.myclass.Article;
 import com.codepath.nytimessearch.R;
 import com.squareup.picasso.Picasso;
@@ -167,7 +168,10 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         // Populate the thumbnail images
         // Remote download the image in the background
         String thumbnail = article.getThumbNail();
-        Picasso.with(getContext()).load(thumbnail).into(imageView);
+        Glide.with(getContext())
+                .load(thumbnail)
+                .centerCrop()
+                .into(imageView);
 
     }
 
