@@ -2,7 +2,6 @@ package com.codepath.nytimessearch.adapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,10 +19,13 @@ import java.util.List;
  */
 // Basic recycler adapter.
 // Specify the custom ViewHolder to access our views
-public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder>
+public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 {
 
+    // TAG the article is text only or not
+    private final int TEXTONLY = 1;
     // Create OnItemClickListener
+
     // Define listener member variable
     private OnItemClickListener listener;
     // Define the listener interface
@@ -65,6 +67,35 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         }
     }
 
+    public class ViewHolderTextOnly extends RecyclerView.ViewHolder {
+        private TextView tvTextOnly;
+
+        public ViewHolderTextOnly(final View v) {
+            super(v);
+            tvTextOnly = (TextView) v.findViewById(R.id.tvTextOnly);
+            // Setup the click listener
+            v.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (listener != null) {
+                        int position = getAdapterPosition();
+                        if (position != RecyclerView.NO_POSITION) {
+                            listener.onItemClick(v, position);
+                        }
+                    }
+                }
+            });
+        }
+
+        public TextView getTextView() {
+            return tvTextOnly;
+        }
+        public void setTextView(TextView tvTextOnly) {
+            this.tvTextOnly = tvTextOnly;
+        }
+    }
+
+
     // Store a number variable for the articles
     private List<Article> mArticles;
     // Store the context for easy access
@@ -83,35 +114,84 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     // Inflate a layout xml and return the holder
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         Context context = parent.getContext();
+        RecyclerView.ViewHolder viewHolder;
         LayoutInflater inflater = LayoutInflater.from(context);
-        // Inflate the custom layout
-        View articleView = inflater.inflate(R.layout.item_article_result, parent, false);
-        // Return a new holder instance
-        ViewHolder viewHolder = new ViewHolder(articleView);
+        if (viewType == TEXTONLY) {
+            View textOnlyView = inflater.inflate(R.layout.item_article_text_only, parent, false);
+            viewHolder = new ViewHolderTextOnly(textOnlyView);
+        } else {
+            // Inflate the custom layout
+            View articleView = inflater.inflate(R.layout.item_article_result, parent, false);
+            // Return a new holder instance
+            viewHolder = new ViewHolder(articleView);
+        }
         return viewHolder;
     }
 
     // Populate data into the item through holder
     @Override
-    public void onBindViewHolder(RecyclerViewAdapter.ViewHolder viewHolder, int position) {
-        // Get the data model based on position
+    public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
+
+          // Without heterogenous:
+//        // Get the data model based on position
+//        Article article = mArticles.get(position);
+//        // Set item views based on views and data model
+//        TextView textView = viewHolder.tvTitle;
+//        textView.setText(article.getHeadline());
+//        ImageView imageView = viewHolder.ivThumbnails;
+//        // Populate the thumbnail images
+//        // Remote download the image in the background
+//        String thumbnail = article.getThumbNail();
+//        if (!TextUtils.isEmpty(thumbnail)) {
+//            Picasso.with(getContext()).load(thumbnail).into(imageView);
+//        }
+        if (viewHolder.getItemViewType() == TEXTONLY) {
+            ViewHolderTextOnly vhTextOnly = (ViewHolderTextOnly) viewHolder;
+            configureViewHolderTextOnly(vhTextOnly, position);
+        } else {
+            ViewHolder vh = (ViewHolder) viewHolder;
+            configureDefaultViewHolder(vh, position);
+        }
+
+    }
+
+    // configure the individual viewholder objects
+    private void configureDefaultViewHolder(ViewHolder vh, int position) {
         Article article = mArticles.get(position);
         // Set item views based on views and data model
-        TextView textView = viewHolder.tvTitle;
+        TextView textView = vh.tvTitle;
         textView.setText(article.getHeadline());
-        ImageView imageView = viewHolder.ivThumbnails;
+        ImageView imageView = vh.ivThumbnails;
         // Populate the thumbnail images
         // Remote download the image in the background
         String thumbnail = article.getThumbNail();
-        if (!TextUtils.isEmpty(thumbnail)) {
-            Picasso.with(getContext()).load(thumbnail).into(imageView);
+        Picasso.with(getContext()).load(thumbnail).into(imageView);
+
+    }
+
+    private void configureViewHolderTextOnly(ViewHolderTextOnly vhTextOnly, int position) {
+        Article article = mArticles.get(position);
+        if (article != null) {
+            TextView tvTextOnly = vhTextOnly.getTextView();
+            tvTextOnly.setText(article.getHeadline());
         }
     }
 
+
+    // Return the size of dataset
     @Override
     public int getItemCount() {
         return mArticles.size();
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        // Check if there is image or not
+        if (mArticles.get(position).getThumbNail().isEmpty()) {
+            return TEXTONLY;
+        }
+        return -1;
     }
 }

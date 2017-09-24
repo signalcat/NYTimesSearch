@@ -27,6 +27,8 @@
                 android:src="@mipmap/ic_launcher" />
 
             <TextView
+                android:fontFamily="serif"
+                android:textColor="@android:color/black"
                 android:layout_marginLeft="10dp"
                 android:layout_marginBottom="10dp"
                 android:layout_marginRight="10dp"
