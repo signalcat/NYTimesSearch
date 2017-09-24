@@ -107,10 +107,21 @@ public class FilterDialogFragment extends DialogFragment
 
         // Initialize edittext to let user click and show the date.
         etBeginDate = (EditText) view.findViewById(R.id.etBeginDate);
+        // Show the current date
+        etBeginDate.setText(filter.getDate());
+        // Hook up a click listener
         etBeginDate.setOnClickListener(view1 -> showDatePickerDialog(view1));
 
         // Initialize the spinner to let user select the order
         spinner = (Spinner) view.findViewById(R.id.spinnerSortOrder);
+        // show the current order
+        if (filter.getOrder().equals("newest")) {
+            spinner.setSelection(0);
+        } else {
+            spinner.setSelection(1);
+        }
+
+        // Hook up a click listener to show the drop down
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int i, long l) {
@@ -127,6 +138,11 @@ public class FilterDialogFragment extends DialogFragment
         cbArts = (CheckBox) view.findViewById(R.id.cbArts);
         cbFashion = (CheckBox) view.findViewById(R.id.cbFashionStyle);
         cbSports = (CheckBox) view.findViewById(R.id.cbSports);
+
+        // Show the current filter settings
+        cbArts.setChecked(filter.isArt());
+        cbFashion.setChecked(filter.isFashion());
+        cbSports.setChecked(filter.isSport());
 
         // Get the checked/uncheck value and store in filter object
         cbArts.setOnClickListener(view12 -> {

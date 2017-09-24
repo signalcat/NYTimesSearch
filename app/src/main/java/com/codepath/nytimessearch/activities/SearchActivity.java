@@ -173,6 +173,7 @@ public class SearchActivity extends AppCompatActivity
         SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
         String urlDate = format.format(c.getTime());
         filter.setDate(urlDate);
+        filter.setOrder("newest");
         //adapter = new ArticleArrayAdapter(this, articles);
         //gvResults.setAdapter(adapter);
         // hook up listener for recycler view click
