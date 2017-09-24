@@ -1,13 +1,19 @@
 package com.codepath.nytimessearch.activities;
 
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Debug;
 import android.os.Parcel;
+import android.support.customtabs.CustomTabsIntent;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
@@ -83,14 +89,49 @@ public class SearchActivity extends AppCompatActivity
         adapter.setOnItemClickListener(new RecyclerViewAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View itemView, int position) {
-                // Create an intent to display the article
-                Intent i = new Intent(getApplicationContext(), ArticleActivity.class);
-                // Get the article to display
+//
+//                // Create an intent to display the article
+//                Intent i = new Intent(getApplicationContext(), ArticleActivity.class);
+//                // Get the article to display
+//                Article article = articles.get(position);
+//                // Pass in the article into intent
+//                i.putExtra("article", article);
+//                // Launch the activity
+//                startActivity(i);
+
+                // Extract the url
                 Article article = articles.get(position);
-                // Pass in the article into intent
-                i.putExtra("article", article);
-                // Launch the activity
-                startActivity(i);
+                //Article article = (Article) getIntent().getSerializableExtra("article");
+                String url = article.getWebUrl();
+
+                // Create te bitmap for the sharing icon
+                Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.ic_sharing);
+                // Create the intent
+                Intent intent = new Intent(Intent.ACTION_SEND);
+                intent.setType("text/plain");
+                intent.putExtra(Intent.EXTRA_TEXT, url);
+                // Create a pending intent to wake up the app
+                int requestCode = 100;
+                PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(),
+                        requestCode,
+                        intent,
+                        PendingIntent.FLAG_UPDATE_CURRENT);
+
+                // Use a CustomTabsIntent.Builder to configure CustomTabsIntent.
+                CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
+                // set toolbar color
+                builder.setToolbarColor(ContextCompat.getColor(getApplicationContext(), R.color.colorAccent));
+                // add share action to menu list
+                builder.addDefaultShareMenuItem();
+                // Map the bitmap, text, and pending intent to this icon
+                // Set tint to be true so it matches the toolbar color
+                builder.setActionButton(bitmap, "Share Link", pendingIntent, true);
+                // Once ready, call CustomTabsIntent.Builder.build() to create a CustomTabsIntent
+                CustomTabsIntent customTabsIntent = builder.build();
+
+                // and launch the desired Url with CustomTabsIntent.launchUrl()
+                customTabsIntent.launchUrl(getApplicationContext(), Uri.parse(url));
+
             }
         });
 
