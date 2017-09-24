@@ -53,15 +53,12 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             ivThumbnails = (ImageView) itemView.findViewById(R.id.ivImage);
             tvTitle = (TextView) itemView.findViewById(R.id.tvTitle);
             // Setup the click listener
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    // Triggers click upwards to the adapter on click
-                    if (listener != null) {
-                        int position = getAdapterPosition();
-                        if (position != RecyclerView.NO_POSITION) {
-                            listener.onItemClick(itemView, position);
-                        }
+            itemView.setOnClickListener(view -> {
+                // Triggers click upwards to the adapter on click
+                if (listener != null) {
+                    int position = getAdapterPosition();
+                    if (position != RecyclerView.NO_POSITION) {
+                        listener.onItemClick(itemView, position);
                     }
                 }
             });
@@ -75,14 +72,11 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             super(v);
             tvTextOnly = (TextView) v.findViewById(R.id.tvTextOnly);
             // Setup the click listener
-            v.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if (listener != null) {
-                        int position = getAdapterPosition();
-                        if (position != RecyclerView.NO_POSITION) {
-                            listener.onItemClick(v, position);
-                        }
+            v.setOnClickListener(view -> {
+                if (listener != null) {
+                    int position = getAdapterPosition();
+                    if (position != RecyclerView.NO_POSITION) {
+                        listener.onItemClick(v, position);
                     }
                 }
             });

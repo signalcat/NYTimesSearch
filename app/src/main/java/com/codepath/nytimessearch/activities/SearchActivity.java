@@ -86,9 +86,7 @@ public class SearchActivity extends AppCompatActivity
         // Create adapter passing the data
         adapter = new RecyclerViewAdapter(this, articles);
         // Attach a click handler to the adapter
-        adapter.setOnItemClickListener(new RecyclerViewAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(View itemView, int position) {
+        adapter.setOnItemClickListener((itemView, position) -> {
 //
 //                // Create an intent to display the article
 //                Intent i = new Intent(getApplicationContext(), ArticleActivity.class);
@@ -99,40 +97,39 @@ public class SearchActivity extends AppCompatActivity
 //                // Launch the activity
 //                startActivity(i);
 
-                // Extract the url
-                Article article = articles.get(position);
-                //Article article = (Article) getIntent().getSerializableExtra("article");
-                String url = article.getWebUrl();
+            // Extract the url
+            Article article = articles.get(position);
+            //Article article = (Article) getIntent().getSerializableExtra("article");
+            String url = article.getWebUrl();
 
-                // Create te bitmap for the sharing icon
-                Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.ic_sharing);
-                // Create the intent
-                Intent intent = new Intent(Intent.ACTION_SEND);
-                intent.setType("text/plain");
-                intent.putExtra(Intent.EXTRA_TEXT, url);
-                // Create a pending intent to wake up the app
-                int requestCode = 100;
-                PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(),
-                        requestCode,
-                        intent,
-                        PendingIntent.FLAG_UPDATE_CURRENT);
+            // Create te bitmap for the sharing icon
+            Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.ic_sharing);
+            // Create the intent
+            Intent intent = new Intent(Intent.ACTION_SEND);
+            intent.setType("text/plain");
+            intent.putExtra(Intent.EXTRA_TEXT, url);
+            // Create a pending intent to wake up the app
+            int requestCode = 100;
+            PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(),
+                    requestCode,
+                    intent,
+                    PendingIntent.FLAG_UPDATE_CURRENT);
 
-                // Use a CustomTabsIntent.Builder to configure CustomTabsIntent.
-                CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
-                // set toolbar color
-                builder.setToolbarColor(ContextCompat.getColor(getApplicationContext(), R.color.colorAccent));
-                // add share action to menu list
-                builder.addDefaultShareMenuItem();
-                // Map the bitmap, text, and pending intent to this icon
-                // Set tint to be true so it matches the toolbar color
-                builder.setActionButton(bitmap, "Share Link", pendingIntent, true);
-                // Once ready, call CustomTabsIntent.Builder.build() to create a CustomTabsIntent
-                CustomTabsIntent customTabsIntent = builder.build();
+            // Use a CustomTabsIntent.Builder to configure CustomTabsIntent.
+            CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
+            // set toolbar color
+            builder.setToolbarColor(ContextCompat.getColor(getApplicationContext(), R.color.colorAccent));
+            // add share action to menu list
+            builder.addDefaultShareMenuItem();
+            // Map the bitmap, text, and pending intent to this icon
+            // Set tint to be true so it matches the toolbar color
+            builder.setActionButton(bitmap, "Share Link", pendingIntent, true);
+            // Once ready, call CustomTabsIntent.Builder.build() to create a CustomTabsIntent
+            CustomTabsIntent customTabsIntent = builder.build();
 
-                // and launch the desired Url with CustomTabsIntent.launchUrl()
-                customTabsIntent.launchUrl(getApplicationContext(), Uri.parse(url));
+            // and launch the desired Url with CustomTabsIntent.launchUrl()
+            customTabsIntent.launchUrl(getApplicationContext(), Uri.parse(url));
 
-            }
         });
 
         // Initialize articles

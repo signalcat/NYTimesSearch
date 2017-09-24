@@ -107,12 +107,7 @@ public class FilterDialogFragment extends DialogFragment
 
         // Initialize edittext to let user click and show the date.
         etBeginDate = (EditText) view.findViewById(R.id.etBeginDate);
-        etBeginDate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showDatePickerDialog(view);
-            }
-        });
+        etBeginDate.setOnClickListener(view1 -> showDatePickerDialog(view1));
 
         // Initialize the spinner to let user select the order
         spinner = (Spinner) view.findViewById(R.id.spinnerSortOrder);
@@ -134,49 +129,37 @@ public class FilterDialogFragment extends DialogFragment
         cbSports = (CheckBox) view.findViewById(R.id.cbSports);
 
         // Get the checked/uncheck value and store in filter object
-        cbArts.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(cbArts.isChecked()) {
-                    filter.setArt(true);
-                } else {
-                    filter.setArt(false);
-                }
+        cbArts.setOnClickListener(view12 -> {
+            if(cbArts.isChecked()) {
+                filter.setArt(true);
+            } else {
+                filter.setArt(false);
             }
         });
 
-        cbFashion.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(cbFashion.isChecked()) {
-                    filter.setFashion(true);
-                } else {
-                    filter.setFashion(false);
-                }
+        cbFashion.setOnClickListener(view13 -> {
+            if(cbFashion.isChecked()) {
+                filter.setFashion(true);
+            } else {
+                filter.setFashion(false);
             }
         });
 
-        cbSports.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(cbSports.isChecked()) {
-                    filter.setSport(true);
-                } else {
-                    filter.setSport(false);
-                }
+        cbSports.setOnClickListener(view14 -> {
+            if(cbSports.isChecked()) {
+                filter.setSport(true);
+            } else {
+                filter.setSport(false);
             }
         });
 
         Button btnSave = (Button) view.findViewById(R.id.btnSaveFilter);
-        btnSave.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // Return filters back to activity through the implemented listener
-                OnFilterSearchListener listener = (OnFilterSearchListener) getActivity();
-                listener.onUpdateFilters(filter);
-                // Close the dialog to return back to the parent activity
-                dismiss();
-            }
+        btnSave.setOnClickListener(view15 -> {
+            // Return filters back to activity through the implemented listener
+            OnFilterSearchListener listener = (OnFilterSearchListener) getActivity();
+            listener.onUpdateFilters(filter);
+            // Close the dialog to return back to the parent activity
+            dismiss();
         });
 
         // Fetch arguments from bundle and set title
